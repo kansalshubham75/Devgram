@@ -1,6 +1,0 @@
-{
-    "mongoURI": "mongodb+srv://shubham:shubham123@cluster0-ah9y4.mongodb.net/test?retryWrites=true&w=majority",
-    "jwtSecret": "MySecret",
-    "gitClientId": "7ee4b49412972f4ee261",
-    "gitClientSecret": "b300ea931410a2d35347196848cca9a2182867fb"
-}
