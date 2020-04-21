@@ -4,6 +4,8 @@ const { check, validationResult } = require('express-validator');
 const User = require('../../models/User');
 const Profile = require('../../models/Profile');
 const jwtMiddleware = require('../../middleware/jwtMiddleware');
+const request = require('request');
+const config = require('config');
 
 //Create/Update Profile
 router.post('/', [jwtMiddleware, [
@@ -183,7 +185,7 @@ router.post('/education',
             if (!errors.isEmpty()) {
                 res.status(400).json({ errors: errors.array() });
             }
-            
+
             const {
                 school,
                 degree,
@@ -193,7 +195,7 @@ router.post('/education',
                 current,
                 description
             } = req.body;
-            
+
             const edu = {
                 school,
                 degree,
@@ -231,4 +233,29 @@ router.delete('/education/:edu_id', jwtMiddleware, async (req, res) => {
         res.status(500).json({ msg: 'Server Error' });
     }
 });
+
+//Get github repo of a user
+
+router.get('/github/:username', (req, res) => {
+    try {
+        const obj = {
+            uri: `https://api.github.com/user/${req.params.username}/repos?per_page=5&sort?created:asc&client_id=${config.get('gitClientId')}&client_secret=${config.get('gitClientSecret')}`,
+            method: 'GET',
+            headers: { 'user-agent': 'node.js' }
+        };
+        request(obj, (error, response, body) => {
+            if (error) {
+                console.error(error);
+            }
+            if (response.statusCode !== 200) {
+                res.status(404).json({ msg: 'No Github Profile Found' });
+            }
+            res.json(JSON.parse(body));
+        });
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).json({ msg: 'Server error' });
+    }
+});
+
 module.exports = router;
