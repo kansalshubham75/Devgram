@@ -145,7 +145,9 @@ router.delete('/comment/:id/:comment_id', jwtMiddleware, async (req, res) => {
         if (!post) {
             return res.status(404).json({ msg: 'Post does not exist' });
         }
-        const commentIdx = post.comments.findIndex(comment => comment._id === req.params.comment_id);
+        // console.log(typeof(req.params.comment_id));
+        
+        const commentIdx = post.comments.findIndex(comment => comment._id == req.params.comment_id);
         if (commentIdx === -1) {
             return res.status(404).json({ msg: 'Comment not found' });
         }
