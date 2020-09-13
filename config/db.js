@@ -10,7 +10,7 @@ const connection = async () => {
             useCreateIndex: true,
             useFindAndModify : false
         });
-
+        
         console.log('Connected to Database');
     } catch (err) {
         console.log(err.message);

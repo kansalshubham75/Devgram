@@ -13,6 +13,7 @@ router.post('/', [check('name', 'Name is Required').not().isEmpty(),
 check('email', 'Please include a valid email').isEmail(),
 check('password', 'Minimum password length is 6').isLength({ min: 6 })],
     async (req, res) => {
+        console.log('API hit');
         const errors = validationResult(req);
 
         if (!errors.isEmpty()) {
@@ -54,9 +55,12 @@ check('password', 'Minimum password length is 6').isLength({ min: 6 })],
                 config.get('jwtSecret'),
                 { expiresIn: '1h' },
                 (err, token) => {
-                    if (err)
+                    if (err) {
                         throw err;
-                    res.json({ token });
+                    } else {
+                        console.log('sending token');
+                        res.json({ token });
+                    }
                 });
         } catch (err) {
             console.log(err.message);
